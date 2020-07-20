@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ischoolbar.programmer.dao.admin.RateDao">
+	<!-- excel导出操作 -->
+	<resultMap id="ExcelTest" type="com.ischoolbar.programmer.entity.admin.Rate">
+		<id column="id" property="id"/>
+		<result column="num" property="num"/>
+		<result column="name" property="name"/>
+		<result column="rate" property="rate"/>
+		<result column="remark" property="remark"/>
+	</resultMap>
+	<!-- 结算方式插入操作 -->
+	<insert id="add" parameterType="com.ischoolbar.programmer.entity.admin.Rate">
+		insert into rate(id,num,name,rate,remark) values(null,#{num},#{name},#{rate},#{remark})
+	</insert>
+	<!-- 结算方式编辑操作 -->
+	<update id="edit" parameterType="com.ischoolbar.programmer.entity.admin.Rate">
+		update rate set name = #{name},num = #{num},remark = #{remark},rate = #{rate} where id = #{id}
+	</update>
+	<!-- 结算方式搜索查询 -->
+	<select id="findList" parameterType="Map" resultType="com.ischoolbar.programmer.entity.admin.Rate">
+		select * from rate
+		<if test="name != null">
+			where name like '%${name}%'
+		</if>
+		<if test="offset != null and pageSize != null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+
+
+
+	<!-- 模糊搜索总条数 -->
+	<select id="getTotal" parameterType="Map" resultType="Integer">
+		select count(*) from rate
+		<if test="name != null">
+			where name like '%${name}%'
+		</if>
+	</select>
+
+
+	<!-- excel功能实现 -->
+	<select id="GetList" resultMap="ExcelTest">
+		select * from rate
+	</select>
+</mapper>
